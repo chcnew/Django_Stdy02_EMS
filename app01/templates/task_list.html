@@ -1,0 +1,123 @@
+{% extends "temp/layout.html" %}
+{#{% extends "temp/task_list_temp.html" %}#}
+
+{% block content %}
+    <div class="panel" style="background-color: #afd9ee">
+        <div class="panel-heading">
+            <h4 class="text-primary text-center"><strong>{{ title_name }}</strong></h4>
+        </div>
+        <div class="panel-body" style="background-color: #afd9ee">
+
+            {#            <form class="form-signin" method="post" novalidate >#}
+            <form class="form-signin" novalidate id="login_form">
+                {#                ajax在后端装饰器已做csrf_token免验证，此处不再需要验证代码#}
+                <div class="clearfix">
+                    {% for field in form %}
+                        <div class="col-md-6">
+                            <div class="form-group" style="position: relative;margin-bottom: 30px">
+                                <label class="control-label" style="font-size: 16px;margin-top: 5px">{{ field.label }}</label>
+                                {{ field }}
+                                <span class="error-msg" style="position: absolute;color: red"></span>  {# 这就是$(#id_+name).next()的预留位置 #}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success" id="tasksub">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> <!-- 新建任务面板 -->
+
+    <form method="get">
+        <div class="input-group col-md-3 col-md-offset-9">
+            <input type="text" class="form-control" placeholder={{ search_placeholder }} name="srch" value={{ search_data }}>
+            <span class="input-group-btn">
+                        <button class="btn btn-success" type="submit">
+                            <span><strong>搜索</strong></span>
+                        </button>
+                    </span>
+        </div>
+    </form><!-- 搜索 -->
+    <div class="panel panel-default">
+        <div class="panel-heading" style="font-size: 15px">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><strong>任务信息</strong>
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered" style="table-layout: fixed">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">任务级别</th>
+                <th class="text-center">任务标题</th>
+                <th class="text-center">任务详细</th>
+                <th class="text-center">任务负责人</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in page_queryset %}
+                <tr>
+                    <th scope="row" class="text-center">{{ obj.id }}</th>
+                    <td class="text-center">{{ obj.get_level_display }}</td>
+                    <td class="text-center">{{ obj.title }}</td>
+                    <td class="text-center" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ obj.detail }}</td>
+                    <td class="text-center">{{ obj.responsible.name }}</td>
+                    <td class="text-center">
+                        <a href="/task/{{ obj.id }}/edit/" class="btn btn-info btn-xs">编辑</a>
+                        <a href="/task/{{ obj.id }}/delete/" class="btn btn-danger btn-xs">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div> <!-- 面板+表格 信息显示 -->
+
+    <form method="get" class="row row-no-gutters text-center">
+            <ul class="pagination">
+                {{ page_str }}
+                <input type="text" name="page" value="{{ page }}" placeholder="页码" style="width: 75px;height: 34px;border-radius: 5%;margin-left: 2px;outline: none" class="btn text-center">
+            </ul>
+        <button type="submit" class="btn btn-primary" style="border-radius: 15%;margin-left: -4px">跳转</button>
+        <div style="color: red;font-size: 12px">
+            {{ page_jump_error }}
+        </div>
+    </form> <!-- 分页 -->
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+            submit_btn("#tasksub", "#login_form");
+        })
+
+        function submit_btn(idclick, idform) {
+            $(idclick).click(function () {
+                    {# 点击执行后先清空错误提示，在重新提示 #}
+                    $(".error-msg").text("");
+                    $.ajax({
+                        url: '/task/list/',
+                        type: 'post',
+                        data: $(idform).serialize(),
+                        dataType: "JSON",
+                        success: function (res) {
+                            if (res.status) {
+                                alert("添加成功！");
+                                {# js刷新页面 #}
+                                location.reload();
+                            } else {
+                                $.each(res.errors, function (name, data) {
+                                    console.log(name, data)
+                                    {#点击提交按钮，函数执行，Input框绑定id也执行#}
+                                    {#找到下一个标签，就是之前预留的，写入text内容#}
+                                    $("#id_"+name).next().text(data[0]);
+                                })
+                            }
+                        }
+                    })
+                }
+            )
+        }
+    </script>
+{% endblock %}

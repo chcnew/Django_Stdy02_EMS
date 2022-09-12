@@ -1,0 +1,77 @@
+{% extends "temp/login_temp.html" %}
+{% load static %}
+
+
+{% block css %}
+    <title>系统登录</title>
+    <link rel="stylesheet" href="{% static 'css/partysu.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-4 col-md-offset-4">
+        <div class="signin-box">
+            <div class="login-box">
+                <div class="center">
+                    <h2 class="login-title">
+                        <strong>系统登录</strong>
+                    </h2>
+                    <form id="formLogin">
+                        <div class="form-group input-box">
+                            {{ form.username }}
+                            <span></span>
+                            {{ form.password }}
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="row row row-no-gutters">
+                                <div class="col-md-6 col-sm-6  col-xs-6">
+                                    {{ form.imgcode }}<span style="color: red;">{{ form.imgcode.errors.0 }} </span>
+                                </div>
+                                <div class="col-md-6 col-sm-6  col-xs-6 captcha">
+                                    <img class="verification" src="/image/code/" alt="验证码图片" onclick="this.setAttribute('src','/image/code/?nocache='+Math.random());"/>
+                                </div> <!--验证码-->
+                            </div>
+                        </div>
+                        <button id="sub-login">登录</button>
+                    </form>
+                    <div class="col-md-6">
+                        <a href="">忘记密码</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <a href="/user/register/">点击注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/partysu.js' %}"></script>
+    <script>
+        $(function () {
+            btn1Event();
+        })
+
+        function btn1Event() {
+            $("#sub-login").click(function () {
+                $.ajax({
+                    url: '/user/login/',
+                    type: 'post',
+                    data: $("#formLogin").serialize(),
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.status) {
+                            self.location = '/user/list/'
+                        } else {
+                            console.log(res)
+                            $.each(res.errors, function (name, value) {
+                                $("#id_" + name).next().text(value[0]);
+                            })
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+{% endblock %}

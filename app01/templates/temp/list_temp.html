@@ -1,0 +1,31 @@
+{# =============== 列表页面继承 ================ #}
+{# =============== 列表页面继承 ================ #}
+{# =============== 列表页面继承 ================ #}
+
+{% extends "temp/layout.html" %}
+
+{% block addsrch %}
+    {% block upload %}{% endblock %}  <!-- 文件上传 -->
+
+
+    <div class="row">
+        <div class="col-md-9">
+            <a href="{{ addhref }}" type="button" class="btn btn-primary" style="margin-bottom: 4px">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                {{ addtext }}
+            </a>
+        </div> <!-- 新增按钮 -->
+        <form method="get">
+            <div class="input-group" style="width: 277px;">
+                <input type="text" class="form-control" placeholder={{ search_placeholder }} name="srch" value={{ search_data }}>
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit">
+                        <span style="font-size: 14px">
+                            <strong>搜索</strong>
+                        </span>
+                    </button>
+                </span>
+            </div>
+        </form><!-- 搜索 -->
+    </div> <!-- 新增按钮和搜索 -->
+{% endblock %}

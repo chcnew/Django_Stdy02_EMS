@@ -1,0 +1,73 @@
+{% extends "temp/layout.html" %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-heading">
+            <h4 class="text-primary text-center"><strong>新增用户</strong></h4>
+        </div>
+    </div>
+
+    <form class="form-signin form-horizontal" method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="u_name" class="control-label col-md-3 col-xs-offset-1" style="font-size: 16px;">姓名：</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="name" placeholder="输入修改用户姓名..." id="u_name" value="{{ row_obj.name }}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="u_password" class="control-label col-md-3 col-md-offset-1" style="font-size: 16px;">密码：</label>
+            <div class="col-md-5">
+                <input type="password" class="form-control" name="password" placeholder="输入修改用户密码..." id="u_password" value="{{ row_obj.password }}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="u_age" class="control-label col-md-3 col-md-offset-1" style="font-size: 16px;">年龄：</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="age" placeholder="输入修改用户年龄..." id="u_age" value="{{ row_obj.age }}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="u_account" class="control-label col-md-3 col-md-offset-1" style="font-size: 16px;">账户余额：</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="account" placeholder="输入修改用户账户余额..." id="u_account" value="{{ row_obj.account }}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="u_create_time" class="control-label col-md-3 col-md-offset-1" style="font-size: 16px;" id="dt">入职时间：</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="create_time" placeholder="输入修改用户入职时间..." id="u_create_time" value="{{ row_obj.create_time|date:"Y-m-d" }}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="u_gender" class="control-label col-md-3 col-md-offset-1" style="font-size: 16px;">性别：</label>
+            <div class="col-md-5">
+                <select class="form-control" name="gender">
+                    {% for iterm in gender_choices %}
+                        <option value="{{ iterm.0 }}">{{ iterm.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="u_title" class="control-label col-md-3 col-md-offset-1" style="font-size: 16px;">所属部门：</label>
+            <div class="col-md-5">
+                <select class="form-control" name="depart_id">
+                    {% for iterm in department %}
+                        <option value="{{ iterm.id }}">{{ iterm.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">提交</button>
+        </div>
+    
+    </form>
+{% endblock %}

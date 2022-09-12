@@ -1,0 +1,36 @@
+{# =============== 添加及编辑页面继承 ================ #}
+{# =============== 添加及编辑页面继承 ================ #}
+{# =============== 添加及编辑页面继承 ================ #}
+
+{% extends "temp/layout.html" %}
+
+{% block content %}
+    <div class="panel" style="background-color: #afd9ee">
+        <div class="panel-heading">
+            <h4 class="text-primary text-center"><strong>{{ title_name }}</strong></h4>
+        </div>
+        <div class="panel-body" style="background-color: #afd9ee">
+            <form class="form-signin" method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="clearfix">
+                    {% for field in form %}
+                        <div class="col-md-12">
+                            <div class="form-group" style="position: relative;margin-bottom: 25px">
+                                <label class="control-label" style="font-size: 16px;margin-top: 5px">{{ field.label }}</label>
+                                {{ field }}
+                                <span style="color: red;position: absolute;">{{ field.errors.0 }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success">提交</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

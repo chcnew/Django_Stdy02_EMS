@@ -1,0 +1,60 @@
+{# =============== 登录页面继承 ================ #}
+{# =============== 登录页面继承 ================ #}
+{# =============== 登录页面继承 ================ #}
+{# =============== 登录页面继承 ================ #}
+{# =============== 登录页面继承 ================ #}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>联通用户管理系统</title>
+    <!-- 使用X-UA-Compatible设置IE兼容模式 最新渲染模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- meta相关属性值说明：
+            viewpot表示用户可缩放页面
+            width表示视区逻辑宽度
+            device-width视区宽度应为设备的屏幕宽度
+            initial-scale用于设置Web页面的初始缩放比例
+            initial-scale=1则显示未经缩放的Web文档-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- 载入Bootstrap的css -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}">
+    <!-- 载入bootstrap-datepicker的css -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}">
+
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<div class="container">
+    {% block addsrch %}{% endblock %}
+    {% block content %}{% endblock %}
+</div>
+{% block custom %}{% endblock %}
+</body>
+
+<!-- 如果使用插件，必须引入jQuery -->
+<script type="text/javascript" src="{% static 'plugins/jquery/jquery-3.6.0.min.js' %}"></script>
+<!-- 包括所有的bootstrap的js插件或者可以根据需要调用js插件调用 -->
+<script type="text/javascript" src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- 载入bootstrap-datepicker的js -->
+<script type="text/javascript" src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#id_create_time').datepicker({
+            format: "yyyy-mm-dd",//显示格式
+            startDate: "2000-00-00",//开始时间
+            language: "zh-CN",//语言
+            autoclose: true,//选择后自动关闭
+            clearBtn: true,//清除按钮,
+            todayHighlight: true,//高亮显示今日
+        });
+    })
+</script> <!-- 时间插件 -->
+{% block js %}{% endblock %}
+</html>

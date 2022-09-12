@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- 使用X-UA-Compatible设置IE兼容模式 最新渲染模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- meta相关属性值说明：
+            viewpot表示用户可缩放页面
+            width表示视区逻辑宽度
+            device-width视区宽度应为设备的屏幕宽度
+            initial-scale用于设置Web页面的初始缩放比例
+            initial-scale=1则显示未经缩放的Web文档-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- 载入Bootstrap的CSS -->
+    <link rel="stylesheet" href="{% static 'plugins/Bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+
+</body>
+<!-- 如果使用插件，必须引入jQuery -->
+<script type="text/javascript" src="{% static 'plugins/jquery/jquery-3.6.0.min.js' %}"></script>
+<!-- 包括所有的bootstrap的js插件或者可以根据需要调用js插件调用 -->
+<script type="text/javascript" src="{% static 'plugins/Bootstrap/js/bootstrap.min.js' %}"></script>
+<script>
+    alert("该部门已存在！");
+</script>
+</html>

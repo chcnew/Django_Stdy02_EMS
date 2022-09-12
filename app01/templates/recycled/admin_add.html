@@ -1,0 +1,23 @@
+{% extends "temp/layout.html" %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-heading">
+            <h4 class="text-primary text-center"><strong>新建管理员</strong></h4>
+        </div>
+    </div>
+
+    <form class="form-signin" method="post" novalidate>
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}：</label>
+                {{ field }}
+                <span style="color: red">{{ field.errors.0 }}</span>
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success">提交</button>
+    </form>
+{% endblock %}

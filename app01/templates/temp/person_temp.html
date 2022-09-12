@@ -1,0 +1,37 @@
+{% extends "temp/layout.html" %}
+
+{% block content %}
+
+    <div style="min-height: 500px;">
+        <div class="container clearfix" style="margin-top: 20px;">
+            <div class="row-no-gutters">
+                <div class="col-sm-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #91cbe8;font-weight: bold;">
+                            个人中心
+                        </div>
+                        <div class="list-group" style="border-radius: 0">
+                            <div>
+
+                                {% block person_five %}{% endblock %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% block person %}{% endblock %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+
+    </script>
+{% endblock %}

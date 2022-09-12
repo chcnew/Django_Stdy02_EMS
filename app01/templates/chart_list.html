@@ -1,0 +1,245 @@
+{% extends "temp/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            折线图
+        </div>
+        <div class="panel-body">
+            <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+            <div id="linechart" style="width: 1100px;height:300px; margin: auto;">
+            </div>
+        </div> <!-- 折线图 -->
+
+        <div class="row row-no-gutters">
+            <div class="col-md-7">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        柱状图
+                    </div>
+                    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+                    <div id="main" style="width: 660px;height:420px; margin: auto;">
+
+                    </div>
+                </div><!-- 柱状图 -->
+            </div>
+            <div class="col-md-5">
+                <div class="panel panel-info">
+                    <div class="panel-heading">饼图</div>
+                    <div id="container" style="width: 470px;height:420px"></div>
+                </div>
+            </div> <!-- 饼图 -->
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        //导入主题
+        $.getJSON('{% static "plugins/echarts/westeros.project.json" %}', function (themeJSON) {
+            echarts.registerTheme('vintage', JSON.parse(themeJSON));
+            var chart = echarts.init(dom, 'vintage');
+        });
+    </script>
+
+
+    <!-- 折线图 -->
+    <script type="text/javascript">
+        $(function () {
+            /*
+            * 初始化
+            */
+            initLine();
+        })
+
+        function initLine() {
+            var myChart = echarts.init(document.getElementById("linechart"));
+            var option = {
+
+                title: {
+                    text: '用户业务增长情况',
+                    left: "center",
+                    bottom: "0%"
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['邮件', '通话', '影音', '短信', '宽带']
+                },
+                grid: {
+                    left: '3%',
+                    right: '5%',
+                    bottom: '15%',
+                    containLabel: true
+                },
+                toolbox: {},
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['周一', 'T周二', '周三', '周四', '周五', '周六', '周日']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: '邮件',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [120, 132, 101, 134, 90, 230, 210]
+                    },
+                    {
+                        name: '通话',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [220, 182, 191, 234, 290, 330, 310]
+                    },
+                    {
+                        name: '影音',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [150, 232, 201, 154, 190, 330, 410]
+                    },
+                    {
+                        name: '短信',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [320, 332, 301, 334, 390, 330, 320]
+                    },
+                    {
+                        name: '宽带',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [820, 932, 901, 934, 1290, 1330, 1320]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+    </script>
+
+    <!-- 柱状图 -->
+    <script type="text/javascript">
+        $(function () {
+            /*
+            * 初始化
+            */
+            initBar();
+        })
+
+        function initBar() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'), 'vintage');
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: "ECharts 折线图",
+                    left: "center",
+                    bottom: 0
+                },
+                tooltip: {},
+                legend: {
+                    data: ["关羽", "张飞"]
+                },
+                xAxis: {
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                },
+                yAxis: {},
+                series: [
+                    {
+                        name: "关羽",
+                        type: 'bar',
+                        data: [23, 24, 18, 25, 27, 28, 25],
+                    },
+                    {
+                        name: "张飞",
+                        type: 'bar',
+                        data: [23, 24, 18, 25, 27, 28, 25]
+                    }
+                ]
+            }
+
+            $.ajax({
+                url: '/chart/bar/',
+                type: 'get',
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        //对图的数据重新赋值
+                        option.title.text = res.text;
+                        option.legend.data = res.legend;
+                        option.xAxis.data = res.xAxis;
+                        option.series = res.series;
+                            //使用刚指定的配置项和数据显示图表。
+                            myChart.setOption(option);
+                    } else {
+                        alert(res.error)
+                    }
+                }
+            });
+
+        }
+    </script>
+
+    <!-- 饼图 -->
+    <script type="text/javascript">
+        $(function () {
+            /*
+            * 初始化
+            */
+            initPie();
+        })
+
+        function initPie() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('container'), 'vintage');
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: "手机用户级别占比",
+                    left: "center",
+                    bottom: 0,
+                },
+                legend: {},
+                toolbox: {},
+                series: [
+                    {
+                        name: 'Pie',
+                        type: 'pie',
+                        radius: [20, 132],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        itemStyle: {
+                            borderRadius: 8,
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{b} : {d}%'  //b:就是data.name;c:就是data.value;d就是占比
+                                },
+                                labelLine: {show: true}
+                            }
+                        },
+                        data: [
+                            {value: 40, name: '普通用户'},
+                            {value: 38, name: 'VIP'},
+                            {value: 32, name: 'VVIP'},
+                            {value: 30, name: 'VVVIP'},
+                        ]
+                    }
+                ]
+            };
+
+
+            myChart.setOption(option);
+
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "temp/layout.html" %}
+
+{% block content %}
+    <div class="panel">
+        <div class="panel-heading">
+            <h4 class="text-info text-center"><strong>编辑部门</strong></h4>
+        </div>
+    </div>
+    <form class="form-signin" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <label for="addDepartment"></label>
+                    <input type="text" class="form-control" name="title" placeholder="输入修改部门名称..." id="addDepartment" style="margin-bottom: 4px" value="{{ row_obj.title }}">
+                </div>
+                 <button type="submit" class="btn btn-success" style="margin-top:19px">提交</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

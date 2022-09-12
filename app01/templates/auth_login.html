@@ -1,0 +1,48 @@
+{% extends "temp/login_temp.html" %}
+{% load static %}
+
+
+{% block css %}
+    <title>系统登录</title>
+    <link rel="stylesheet" href="{% static 'css/partysu.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-4 col-md-offset-4">
+        <div class="signin-box">
+            <div class="login-box">
+                <div class="center">
+                    <h2 class="login-title">
+                        <strong>Auth组件</strong>
+                    </h2>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group input-box">
+                            <input type="text" placeholder="用户名" class="form-control" name="username">
+                            <input type="password" placeholder="密码" class="form-control" name="password">
+                        </div>
+                        <div class="form-group">
+                            <div class="row row row-no-gutters">
+                                <div class="col-md-6 col-sm-6  col-xs-6">
+                                    <input type="text" placeholder="验证码" class="form-control" name="verification">
+                                    <span style="color: red">{{ form.imgcode.errors.0 }}</span>
+                                </div>
+                                <div class="col-md-6 col-sm-6  col-xs-6 captcha">
+                                    <!--这一个是点击就会刷新验证码，src后面对应的是，访问那个HttpResponse的路由地址-->
+                                    <img src="/image/code/" alt="验证码图片" onclick="this.setAttribute('src','/image/code/?nocache='+Math.random());"/>
+                                </div> <!--验证码-->
+                            </div>
+                        </div>
+                        <button id="sub-login" type="submit">登录</button>
+                    </form>
+                    <div class="col-md-6">
+                        <a href="">忘记密码</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <a href="/auth/register/">点击注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

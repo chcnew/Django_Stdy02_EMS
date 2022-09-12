@@ -1,0 +1,121 @@
+{# =============== 初始页面布局 ================ #}
+{# =============== 初始页面布局 ================ #}
+{# =============== 初始页面布局 ================ #}
+{# =============== 初始页面布局 ================ #}
+{# =============== 初始页面布局 ================ #}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>联通用户管理系统</title>
+    <!-- 使用X-UA-Compatible设置IE兼容模式 最新渲染模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- meta相关属性值说明：
+            viewpot表示用户可缩放页面
+            width表示视区逻辑宽度
+            device-width视区宽度应为设备的屏幕宽度
+            initial-scale用于设置Web页面的初始缩放比例
+            initial-scale=1则显示未经缩放的Web文档-->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- 载入Bootstrap的css -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}">
+    <!-- 载入bootstrap-datepicker的css -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}">
+    {% block css %}
+    {% endblock %}
+    <style>
+        .navbar {
+            border-radius: 0; /* 去除圆角 */
+        }
+
+        body {
+        {#padding-top: 40px;#} padding-bottom: 40px;
+        background-color:#94bfb5;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/depart/list/">联通用户管理系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/admin/list/">管理员账户</a></li>
+                <li><a href="/depart/list/">部门管理</a></li>
+                <li><a href="/user/list/">用户管理</a></li>
+                <li><a href="/prettynum/list/">靓号管理</a></li>
+                <li><a href="/task/test/">Ajax学习</a></li>
+                <li><a href="/task/list/">任务管理</a></li>
+                <li><a href="/order/list/">订单管理</a></li>
+                <li><a href="/chart/list/">数据统计</a></li>
+
+            </ul>
+            <ul class="nav nav-pills navbar-right">
+                <li>
+                    <a href="/person/info/">
+                        <img src="https://img.bosszhipin.com/beijin/mcs/useravatar/20180504/6d57bb6c6ac12e9ac51e814fc8cbcee4c47277c37d36409dd68906127e98c4ed_s.jpg" alt="" style="border-radius:50%;width:auto;height: 28px;margin-top: -3px;">
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true" style="height: 45px;">
+                        {{ request.session.info.name }}<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/person/info/">个人中心</a></li>
+                        <!--
+                            <li role="separator" class="divider"></li>
+                         -->
+                        <li><a href="/logout/">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block addsrch %}{% endblock %}
+    {% block content %}{% endblock %}
+</div>
+</body>
+
+<!-- 如果使用插件，必须引入jQuery -->
+<script type="text/javascript" src="{% static 'plugins/jquery/jquery-3.6.0.min.js' %}"></script>
+<!-- 包括所有的bootstrap的js插件或者可以根据需要调用js插件调用 -->
+<script type="text/javascript" src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- 载入bootstrap-datepicker的js -->
+<script type="text/javascript" src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/echarts/echarts.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/echarts/vintage.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#id_create_time').datepicker({
+            format: "yyyy-mm-dd",//显示格式
+            startDate: "2000-00-00",//开始时间
+            language: "zh-CN",//语言
+            autoclose: true,//选择后自动关闭
+            clearBtn: true,//清除按钮,
+            todayHighlight: true,//高亮显示今日
+        });
+    })
+</script>
+
+{% block js %}{% endblock %}
+
+</html>

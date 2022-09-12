@@ -1,0 +1,85 @@
+{% extends "temp/layout.html" %}
+
+{% block content %}
+    <h2>任务管理测试Ajax功能</h2>
+    <hr>
+    <h3>示例1: </h3>
+    <button type="button" id="btn1" class="btn btn-success">testEvent1</button>
+    <hr>
+    <h3>示例2: </h3>
+    <input type="text" id="usr" class="form-control" placeholder="用户名" value="usr">
+    <input type="text" id="pwd" class="form-control" placeholder="密码" value="pwd">
+    <input type="button" id="btn2" class="btn btn-success" value="提交">
+    <hr>
+    <h3>示例3: </h3>
+    <form id="testform">
+        <input type="text" class="form-control" value="usr" name="usr">
+        <input type="text" class="form-control" value="pwd" name="pwd">
+        <input type="text" class="form-control" value="age" name="age">
+        <input type="text" class="form-control" value="date" name="date">
+        <button type="button" id="btn3" class="btn btn-success">提交</button>
+    </form>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+            {#框架加载完成直接执行函数#}
+            bindin1BtnEvent();
+            bindin2BtnEvent();
+            bindin3BtnEvent();
+        })
+
+        function bindin1BtnEvent() {
+            $("#btn1").click(function () {
+                $.ajax({
+                    url: '/task/test/',
+                    type: 'post',
+                    data: {
+                        n1: "test1_n1",
+                        n2: "test1_n2",
+                    },
+                    {# res为返回的data数据 #}
+                    dataType:"JSON",
+                    success: function (res) {
+                        console.log(res)
+                    }
+                })
+            })
+        }
+
+        function bindin2BtnEvent() {
+            $("#btn2").click(function () {
+                $.ajax({
+                    url: '/task/test/',
+                    type: 'post',
+                    data: {
+                        n1: $("#usr").val(),
+                        n2: $("#pwd").val(),
+                    },
+                    {# res为返回的data数据 #}
+                    dataType: "JSON",
+                    success:function (res){
+                        console.log(res)
+                    }
+                })
+            })
+        }
+
+        function bindin3BtnEvent() {
+            $("#btn3").click(function () {
+                $.ajax({
+                    url: '/task/test/',
+                    type: 'post',
+                    data: $("#testform").serialize(),
+                    {# res为返回的data数据 #}
+                    dataType: "JSON",
+                    success: function (res) {
+                        console.log(res)
+                    }
+                })
+            })
+        }
+    </script>
+{% endblock %}

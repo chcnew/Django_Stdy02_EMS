@@ -1,0 +1,44 @@
+{% extends "temp/login_temp.html" %}
+{% load static %}
+
+
+{% block css %}
+    <title>系统登录</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap_login.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="account">
+        <h2 class="form-signin-heading text-center">管理员登录</h2>
+        <form class="form-signin" novalidate method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label></label>
+                {{ form.name }}
+                <span style="color: red">{{ form.name.errors.0 }}</span>
+                <label></label>
+                {{ form.password }}
+                <span style="color: red">{{ form.password.errors.0 }}</span>
+                {#                记住密码功能#}
+                {#                <div class="col-md-2" style="margin-left: -14px">#}
+                {#                    {{ form.flag }}#}
+                {#                </div>#}
+                {#                <label>{{ form.flag.label }}</label>#}
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6  col-xs-6">
+                        {{ form.imgcode }}
+                        <span style="color: red">{{ form.imgcode.errors.0 }}</span>
+                    </div>
+                    <div class="col-md-6 col-sm-6  col-xs-6 captcha">
+                        <!--这一个是点击就会刷新验证码，src后面对应的是，访问那个HttpResponse的路由地址-->
+                        <img style="border-radius:5px; height: 35px;margin-left: -14px; margin-top: 2px;" src="/image/code/" alt="验证码图片" onclick="this.setAttribute('src','/image/code/?nocache='+Math.random());"/>
+                    </div>
+                </div>
+            </div>
+            <button class=" btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        </form>
+    </div>
+{% endblock %}

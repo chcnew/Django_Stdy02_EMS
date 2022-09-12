@@ -1,0 +1,44 @@
+{% extends "temp/login_temp.html" %}
+{% load static %}
+
+
+{% block css %}
+    <title>系统登录</title>
+    <link rel="stylesheet" href="{% static 'css/partysu.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-4 col-md-offset-4">
+        <div class="signin-box">
+            <div class="register-box">
+                <h2 class="register-title">
+                    <strong id="go-reg">注册</strong>
+                </h2>
+                <form id="formReg" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group input-box">
+                        <input type="text" placeholder="用户名" class="form-control" name="username">
+                        <input type="email" placeholder="邮箱" class="form-control" name="email">
+                        <input type="password" placeholder="密码" class="form-control" name="password">
+                        <input type="password" placeholder="确认密码" class="form-control" name="repassword">
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-no-gutters">
+                            <div class="col-md-6 col-sm-6  col-xs-6">
+                                <input type="text" placeholder="验证码" class="form-control" name="verification">
+                                <span style="color: red;">{{ form.imgcode.errors.0 }} </span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 captcha">
+                                <img class="verification" src="/image/code/" alt="验证码图片" onclick="this.setAttribute('src','/image/code/?nocache='+Math.random());"/>
+                            </div> <!--验证码-->
+                        </div>
+                    </div>
+                    <button type="submit">注册</button>
+                </form>
+                <div class="col-md-12 text-center">
+                    <a href="/auth/login/">已有帐号,返回登录!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

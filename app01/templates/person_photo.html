@@ -1,0 +1,51 @@
+{% extends "temp/person_temp.html" %}
+
+{% block person_five %}
+    <a href="/person/info/" class="list-group-item" style="border-left: 2px; height: 45px;">我的资料</a>
+    <a href="/person/modpwd/" class="list-group-item" style="border-left: 2px;height: 45px">修改密码</a>
+    <a href="/person/photo/" class="list-group-item" style="border-left: 2px solid coral;height: 45px">修改头像</a>
+    <a href="/person/num/" class="list-group-item" style="border-left: 2px;height: 45px">修改号码</a>
+{% endblock %}
+
+{% block person %}
+    <div class="col-sm-9">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center" style="background-color: #91cbe8;">
+                <i class="fa fa-address-card-o" aria-hidden="true"></i>
+                我的资料
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" style="width: 853px;height: 147px;">
+                    <div>
+                        <div style="position: relative;border: 5px solid lightblue;width: 150px;height:150px;margin: 5px auto;border-radius: 50%;">
+                            <img src="/static/img/default.jpg" alt="选择并上传头像" id="avatar_img"
+                                 style="width: 140px;height: 140px;left:0;top: 0;border-radius: 50%;"/>
+                            <input type="file" id="avatar_file" name="avatar_file"
+                                   accept="image/jpg,image/png,image/gif"
+                                   style="width: 100%;height:100%;opacity: 0;position: absolute;left:0;top: 0;"/>
+                        </div>
+                        <br/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // 头像预览
+        $("#avatar_file").change(function () {
+            // 获取上传文件对象
+            var file = $(this)[0].files[0];
+            // 读取文件URL
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            // 阅读文件完成后触发的事件
+            reader.onload = function () {
+                // 读取的URL结果：this.result
+                $("#avatar_img").attr("src", this.result);
+            }
+        });
+    </script>
+{% endblock %}

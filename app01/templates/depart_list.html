@@ -1,0 +1,44 @@
+{% extends "temp/list_temp.html" %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading" style="font-size: 15px">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            <strong>部门信息</strong>
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">部门</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in page_queryset %}
+                <tr>
+                    <th scope="row" class="text-center">{{ obj.id }}</th>
+                    <td class="text-center">{{ obj.title }}</td>
+                    <td class="text-center">
+                        <a href="/depart/{{ obj.id }}/edit/" class="btn btn-info btn-xs">编辑</a>
+                        <a href="/depart/{{ obj.id }}/delete/" class="btn btn-danger btn-xs">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div> <!-- 面板+表格 信息显示 -->
+
+    <form method="get" class="row row-no-gutters text-center">
+            <ul class="pagination">
+                {{ page_str }}
+                <input type="text" name="page" value="{{ page }}" placeholder="页码" style="width: 75px;height: 34px;border-radius: 5%;margin-left: 2px;outline: none" class="btn text-center">
+            </ul>
+        <button type="submit" class="btn btn-primary" style="border-radius: 15%;margin-left: -4px">跳转</button>
+        <div style="color: red;font-size: 12px">
+            {{ page_jump_error }}
+        </div>
+    </form> <!-- 分页 -->
+{% endblock %}

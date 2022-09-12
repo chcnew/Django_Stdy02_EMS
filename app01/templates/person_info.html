@@ -1,0 +1,39 @@
+{% extends "temp/person_temp.html" %}
+
+{% block person_five %}
+    <a href="/person/info/" class="list-group-item" style="border-left: 2px solid coral; height: 45px;">我的资料</a>
+    <a href="/person/modpwd/" class="list-group-item" style="border-left: 2px;height: 45px">修改密码</a>
+    <a href="/person/photo/" class="list-group-item" style="border-left: 2px;height: 45px">修改头像</a>
+    <a href="/person/num/" class="list-group-item" style="border-left: 2px;height: 45px">修改号码</a>
+{% endblock %}
+
+{% block person %}
+    <div class="col-sm-9">
+        <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-address-card-o" aria-hidden="true"></i> 我的资料</div>
+            <div class="panel-body">
+                <form class="form-horizontal" style="width: 853px;height: 147px;">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">用户名：</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static">{{ request.session.info.name }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">手机号：</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static">15885464645</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">注册时间：</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static">2022年3月16日 13:07</p>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

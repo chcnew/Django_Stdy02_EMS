@@ -1,0 +1,27 @@
+{% extends "temp/add_edit_temp.html" %}
+{% load static %}
+
+{% block css %}
+    <!-- 载入bootstrap-datepicker的css -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/css/bootstrap-datepicker.css' %}">
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block js %}
+    <!-- 载入bootstrap-datepicker的js -->
+    <script type="text/javascript" src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#id_create_time').datepicker({
+                format: "yyyy-mm-dd",//显示格式
+                startDate: "2000-00-00",//开始时间
+                language: "zh-CN",//语言
+                autoclose: true,//选择后自动关闭
+                clearBtn: true,//清除按钮,
+                todayHighlight: true,//高亮显示今日
+            });
+        })
+    </script>
+{% endblock %}

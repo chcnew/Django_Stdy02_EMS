@@ -1,0 +1,315 @@
+{% extends "temp/layout.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            <button type="button" class="btn btn-primary" id="add-btn" style="margin-bottom: 4px">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                {{ addtext }}
+            </button>
+        </div> <!-- 新增按钮 -->
+        <form method="get">
+            <div class="input-group" style="width: 277px;">
+                <input type="text" class="form-control" placeholder={{ search_placeholder }} name="srch" value={{ search_data }}>
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit">
+                        <span style="font-size: 14px">
+                            <strong>搜索</strong>
+                        </span>
+                    </button>
+                </span>
+            </div>
+        </form><!-- 搜索 -->
+    </div> <!-- 新增按钮和搜索 -->
+
+    <!-- 新建订单模态框start -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header" style="background-color: #91cbe8">
+                    {#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+                    <h4 class="modal-title" id="myModalLabel"><strong id="strongtext">新建XXX</strong></h4>
+                </div>
+
+                <div class="modal-body" style="background-color: #9dc1d3">
+                    <form id="formAdd">
+                        <div class="clearfix">
+                            {% for field in form %}
+                                <div class="col-md-6">
+                                    <div class="form-group" style="position: relative;margin-bottom: 30px">
+                                        <label for="">{{ field.label }}</label>
+                                        {{ field }}
+                                        <span style="color:red; position: absolute" class="error-msg"></span> {# 填入错误提示位置 #}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="clo-add">关闭</button>
+                    <button type="button" class="btn btn-primary" id="order-save">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 新建订单模态框end-->
+
+    <!-- 删除订单模态框start -->
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <div style="text-align: left">
+                    <h4>确定删除订单？</h4>
+                    <p>删除订单与之相关数据会一并删除！</p>
+                </div>
+                <p style="text-align: right">
+                    <button type="button" class="btn btn-danger" id="delete-sure">确 定</button>
+                    <button type="button" class="btn btn-default btn-close">取 消</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- 删除订单模态框end -->
+
+    <div class="panel panel-default">
+        <div class="panel-heading" style="font-size: 15px">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            <strong>订单信息</strong>
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">订单号</th>
+                <th class="text-center">名称</th>
+                <th class="text-center">价格</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">管理员</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in page_queryset %}
+                <tr>
+                    <th scope="row" class="text-center">{{ obj.id }}</th>
+                    <td class="text-center">{{ obj.oid }}</td>
+                    <td class="text-center">{{ obj.title }}</td>
+                    <td class="text-center">{{ obj.price }}</td>
+                    <td class="text-center">{{ obj.get_status_display }}</td>
+                    <td class="text-center">{{ obj.name.name }}</td>
+                    <td class="text-center">
+                        <button class="btn btn-info btn-xs btn-edit" uid={{ obj.id }}>编辑</button>
+                        <button class="btn btn-danger btn-xs btn-delete" uid={{ obj.id }}>删除</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div> <!-- 面板+表格 信息显示 -->
+
+    <form method="get" class="row row-no-gutters text-center">
+            <ul class="pagination">
+                {{ page_str }}
+                <input type="text" name="page" value="{{ page }}" placeholder="页码" style="width: 75px;height: 34px;border-radius: 5%;margin-left: 2px;outline: none" class="btn text-center">
+            </ul>
+        <button type="submit" class="btn btn-primary" style="border-radius: 15%;margin-left: -4px">跳转</button>
+        <div style="color: red;font-size: 12px">
+            {{ page_jump_error }}
+        </div>
+    </form> <!-- 分页 -->
+{% endblock %}
+
+{% block js %}
+    <script>
+        //设置全局变量
+        var DELETE_ID
+        var EDIT_ID
+        $(function () {
+            add_orderEvent();
+            order_saveEvent();
+            clo_addEvent();
+            btn_deleteEvent();
+
+            modal_closeEvent();
+            btn_editEvent();
+        })
+
+        //添加模态框关闭按钮
+        function clo_addEvent() {
+            $("#clo-add").click(function () {
+                //添加模态框面板关闭触发重定向至第一页
+                self.location = "/order/list/"
+            })
+        }
+
+        //模态框删除确定按钮
+        function delete_sureEvent() {
+            //模态框界面确定触发
+            $("#delete-sure").click(function () {
+                //点击删除传出id给后台
+                $.ajax({
+                    url: '/order/delete/',  //  => get请求拼接 /order/delete/?uid=123
+                    type: 'GET',
+                    data: {
+                        uid: DELETE_ID
+                    }, //  =>返回"uid=123",注意uid不要写为字符串，直接是变量，相当于url的参数uid【uid=xxxx】
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.status) {
+                            $("#deleteModal").modal("hide");
+                            {#location.reload();#}
+                            //js重定向
+                            self.location = "/order/list/?page=" + res.page_num;
+                        } else {
+                            console.log(res.error)
+
+                        }
+                    }
+                });
+            });
+        }
+
+        //页面删除按钮触发
+        function btn_deleteEvent() {
+            delete_sureEvent();
+            //点击页面删除按钮触发;获取当前行的ID并赋值到全局变量
+            $(".btn-delete").click(function () {
+                $("#deleteModal").modal("show");
+                DELETE_ID = $(this).attr("uid");  //获取当前点击的标签的uid的属性值："123"
+                {#console.log(DELETE_ID);#}
+            })
+        }
+
+        //删除提示取消按钮
+        function modal_closeEvent() {
+            //点击取消触发
+            $(".btn-close").click(function () {
+                $("#deleteModal").modal("hide");
+            })
+        }
+
+        //list页面新建按钮
+        function add_orderEvent() {
+            $("#add-btn").click(function () {
+                //配合编辑，点击新建EDIT_ID设为未定义
+                EDIT_ID = undefined;
+                //清空错误提示
+                $(".error-msg").text("");
+                // 需要清空模态框的输入框内容；需要转换数据的结构
+                // jquery对象转为DOM对象【$("#formAdd")[0]】
+                $("#formAdd")[0].reset();
+                // 利用标签设置标题
+                $("#strongtext").text("新建订单");
+                // 最后展示模态框
+                $('#myModal').modal('show');
+            })
+        }
+
+        //Ajax添加提交数据
+        function doAdd() {
+            $.ajax({
+                url: '/order/list/',
+                type: 'post',
+                dataType: "JSON",
+                data: $("#formAdd").serialize(),
+                success: function (res) {
+                    if (res.status) {
+                        alert("添加成功！");
+
+                        //关闭对话框，也可以应用刷新
+                        $('#myModal').modal('hide')
+                        //闭对话框后刷新
+                        location.reload();
+                    } else {
+                        $.each(res.errors, function (name, data) {
+                            $("#id_" + name).next().text(data[0]);
+                        })
+                    }
+                    console.log(res)
+                }
+            })
+        }
+
+        //Ajax编辑提交数据
+        function doEdit() {
+            $.ajax({
+                url: '/order/edit/?uid=' + EDIT_ID,
+                type: 'post',
+                dataType: "JSON",
+                data: $("#formAdd").serialize(),
+                success: function (res) {
+                    if (res.status) {
+                        alert("修改成功！");
+                        //关闭对话框，也可以应用刷新
+                        $('#myModal').modal('hide')
+                        //闭对话框后刷新
+                        location.reload();
+                    } else {
+                        $.each(res.errors, function (name, data) {
+                            $("#id_" + name).next().text(data[0]);
+                        })
+                    }
+                    console.log(res)
+                }
+            })
+        }
+
+        //模态框保存按钮(新建与编辑处理)
+        function order_saveEvent() {
+            $("#order-save").click(function () {
+                if (EDIT_ID) {
+                    //编辑
+                    doEdit();
+                } else {
+                    //添加
+                    doAdd();
+                }
+            });
+        }
+
+        //点击编辑，get请求获取数据前端显示
+        function btn_editEvent() {
+            $(".btn-edit").click(function () {
+                //编辑的时候设置的属性
+                EDIT_ID = $(this).attr("uid");
+                $.ajax({
+                    url: '/order/editget/',   //get请求提交地址
+                    type: 'get',
+                    data: {
+                        uid: EDIT_ID //get请求 参数:值
+                    },
+                    dataType: 'JSON',
+                    //POST请求成功返回数据
+                    success: function (res) {
+                        if (res.status) {
+                            // console.log(res)
+                            //清空错误提示
+                            $(".error-msg").text("");
+                            // 清空模态框表单
+                            $("#formAdd")[0].reset();
+                            // 利用标签设置标题
+                            $("#strongtext").text("编辑订单");
+                            // 循环以id_name填入数据
+                            $.each(res.data, function (name, value) {
+                                $("#id_" + name).val(value)
+                            })
+                            // 最后展示模态框
+                            $("#myModal").modal("show");
+
+                        } else {
+                            alert(res.error)
+                        }
+                    },
+                });
+            })
+        }
+    </script>
+{% endblock %}
+
+
